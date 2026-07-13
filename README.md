@@ -1,4 +1,4 @@
-# 💕 Para ti
+# Para ti
 
 Una página web interactiva y romántica con efecto cyberpunk para hacer una invitación especial.
 
