@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>// unlock</title>
+<title>Para ti</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -17,6 +17,8 @@
     --accent-dim: #e07a5544;
     --border: #2e1818;
     --surface: #0a0606;
+    --green: #00ff00;
+    --green-dim: #00ff0044;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,6 +38,59 @@
     z-index: 0;
     opacity: 0.28;
     pointer-events: none;
+  }
+
+  /* Código binario verde animado */
+  .binary-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.15;
+    overflow: hidden;
+  }
+
+  .binary-char {
+    position: absolute;
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 0 0 10px var(--green);
+    animation: float-down linear infinite;
+  }
+
+  @keyframes float-down {
+    from {
+      transform: translateY(-100vh);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(100vh);
+      opacity: 0;
+    }
+  }
+
+  /* Partículas de corazones binarios */
+  .heart-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    font-size: 20px;
+  }
+
+  @keyframes float-up {
+    from {
+      transform: translateY(0) translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-100px) translateX(var(--tx, 0px));
+      opacity: 0;
+    }
   }
 
   .page {
@@ -198,144 +253,52 @@
   }
   .divider { height: 1px; background: var(--border); margin: 24px 0; }
 
-  /* Roulette — slot-machine style vertical scroller */
-  .roulette-wrap { margin: 20px auto 0; width: 260px; }
-  .roulette-window {
-    height: 192px; /* shows 3 items: 1 selected + 1 above + 1 below */
-    overflow: hidden;
-    border-radius: 12px;
+  .invitation-section {
+    margin: 28px 0;
+    padding: 24px;
     border: 1px solid var(--red);
-    box-shadow: 0 0 20px var(--red-faint);
-    position: relative;
-    background: var(--bg);
+    border-radius: 12px;
+    background: var(--red-faint);
   }
-  /* Selection bracket lines */
-  .center-line-top, .center-line-bottom {
-    position: absolute;
-    left: 16px; right: 16px;
-    height: 1px;
-    background: var(--red);
-    opacity: 0.2;
-    z-index: 3;
-    pointer-events: none;
-  }
-  .center-line-top  { top: calc(50% - 32px); }
-  .center-line-bottom { top: calc(50% + 32px); }
-  /* Fade edges for depth */
-  .roulette-window::before,
-  .roulette-window::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    height: 72px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .roulette-window::before { top: 0; background: linear-gradient(to bottom, var(--bg) 5%, transparent); }
-  .roulette-window::after  { bottom: 0; background: linear-gradient(to top, var(--bg) 5%, transparent); }
 
-  .roulette-track {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    will-change: transform;
+  .invitation-title {
+    font-size: 1.2rem;
+    color: var(--red);
+    margin-bottom: 16px;
+    font-weight: 600;
   }
-  .roulette-item {
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+  .invitation-details {
     font-size: 0.95rem;
-    font-weight: 400;
-    color: var(--muted);
-    letter-spacing: 0.03em;
-    flex-shrink: 0;
-    width: 260px;
-    opacity: 0.35;
-    transition: color 0.2s, opacity 0.2s, font-size 0.2s, font-weight 0.2s;
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 20px;
   }
-  .roulette-item.near     { color: var(--text); opacity: 0.6; }
-  .roulette-item.selected { color: var(--red); opacity: 1; font-size: 1.05rem; font-weight: 600; }
 
-  .roulette-btn-row {
+  .invitation-details strong {
+    color: var(--red);
+  }
+
+  .confirm-buttons {
     display: flex;
     gap: 12px;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 20px;
   }
 
-  .result-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--red-faint);
-    border: 1px solid var(--red);
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-size: 0.9rem;
+  .btn-yes {
+    border-color: #4caf50;
+    color: #4caf50;
+  }
+  .btn-yes::before { background: rgba(76,175,80,0.1); }
+  .btn-yes:hover { box-shadow: 0 0 22px rgba(76,175,80,0.4); border-color: #4caf50; }
+
+  .btn-no {
+    border-color: var(--red);
     color: var(--red);
-    margin: 16px 0 0;
-    font-weight: 500;
   }
-
-  .time-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 22px 0 28px;
-    text-align: left;
-  }
-  .time-option {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 20px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.92rem;
-    color: var(--muted);
-    background: transparent;
-    position: relative;
-    overflow: hidden;
-  }
-  .time-option::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--red-faint);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.2s ease;
-  }
-  .time-option:hover { border-color: var(--red); color: var(--text); }
-  .time-option:hover::before { transform: scaleX(1); }
-  .time-option.selected { border-color: var(--red); color: var(--red); background: var(--red-faint); }
-  .time-option.selected .radio-dot { border-color: var(--red); }
-  .time-option.selected .radio-dot::after { opacity: 1; transform: scale(1); }
-
-  .radio-dot {
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    border: 1.5px solid var(--muted);
-    flex-shrink: 0;
-    position: relative;
-    transition: border-color 0.2s;
-    z-index: 1;
-  }
-  .radio-dot::after {
-    content: '';
-    position: absolute;
-    inset: 2px;
-    border-radius: 50%;
-    background: var(--red);
-    opacity: 0;
-    transform: scale(0.4);
-    transition: all 0.2s ease;
-  }
-  .time-label { z-index: 1; }
+  .btn-no::before { background: var(--red-faint); }
+  .btn-no:hover { box-shadow: 0 0 22px var(--red-dim); }
 
   .final-msg {
     font-size: 1.4rem;
@@ -409,6 +372,7 @@
 <body>
 
 <canvas id="matrix-canvas"></canvas>
+<div class="binary-background" id="binary-bg"></div>
 <div class="scanlines"></div>
 <footer class="footer">by <a href="http://github.com/Sandreke/feliz-mes" target="_blank" rel="noopener">Sandreke</a></footer>
 
@@ -425,8 +389,8 @@
       </svg>
     </div>
 
-    <h1>Esto se desbloquea<br>con tu nombre <span class="heart">❤</span></h1>
-    <p class="sub" style="margin-top:8px; margin-bottom:24px;"></p>
+    <h1>Para ti <span class="heart">❤</span></h1>
+    <p class="sub" style="margin-top:8px; margin-bottom:24px;">Escribe tu nombre para continuar</p>
 
     <div class="name-input-wrap">
       <input
@@ -451,67 +415,52 @@
   </div>
 </section>
 
-<!-- Page 2: activity roulette -->
-<section class="page" id="page-roulette">
+<!-- Page 2: invitation -->
+<section class="page" id="page-invitation">
   <div class="card fade-in">
     <div class="card-corner tl"></div><div class="card-corner tr"></div>
     <div class="card-corner bl"></div><div class="card-corner br"></div>
 
-    <div class="big-text">Feliz 3 meses 🥳</div>
+    <div class="big-text">Para ti ✨</div>
 
     <div class="divider"></div>
 
-    <div class="roulette-wrap">
-      <div class="roulette-window">
-        <div class="center-line-top"></div>
-        <div class="center-line-bottom"></div>
-        <div class="roulette-track" id="roulette-track"></div>
+    <div class="invitation-section">
+      <div class="invitation-title">Te invito a una cita 💝</div>
+      <div class="invitation-details">
+        <strong>📅 Martes 14 de julio</strong><br>
+        <strong>🕐 8:00 PM</strong><br>
+        <strong>📍 El Seúl</strong><br><br>
+        Para que podamos conversar y pasar un tiempo juntos.
       </div>
-      <div class="roulette-btn-row">
-        <button class="btn" id="spin-btn" onclick="spinRoulette()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="23 4 23 10 17 10"/>
-            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      <div class="confirm-buttons">
+        <button class="btn btn-yes" onclick="confirmYes()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
           </svg>
-          girar
+          ¡Sí!
         </button>
-        <button class="btn btn-accent" id="confirm-roulette-btn" onclick="confirmRoulette()" style="display:none">
-          elegir este
+        <button class="btn btn-no" onclick="confirmNo()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          No
         </button>
       </div>
     </div>
-
-    <div id="roulette-result" style="display:none">
-      <div class="result-badge" id="result-badge"></div>
-    </div>
   </div>
 </section>
 
-<!-- Page 3: time picker -->
-<section class="page" id="page-time">
-  <div class="card fade-in">
-    <div class="card-corner tl"></div><div class="card-corner tr"></div>
-    <div class="card-corner bl"></div><div class="card-corner br"></div>
-
-    <h1>¿A qué hora<br>puedes estar lista? <span class="heart">✦</span></h1>
-
-    <div class="time-options" id="time-options"></div>
-
-    <button class="btn btn-accent" id="confirm-time-btn" onclick="confirmTime()" disabled>
-      confirmar hora
-    </button>
-  </div>
-</section>
-
-<!-- Page 4: final reveal -->
+<!-- Page 3: final reveal -->
 <section class="page" id="page-final">
   <div class="card fade-in">
     <div class="card-corner tl"></div><div class="card-corner tr"></div>
     <div class="card-corner bl"></div><div class="card-corner br"></div>
 
     <div class="final-msg">
-      ya eres hermosa,<br>
-      pero estate lista a las <span class="final-time" id="final-time-text">?</span>
+      Para ti,<br>
+      <span class="final-time">martes 14 a las 8pm en el Seúl 💕</span>
     </div>
 
     <div class="final-addr">
@@ -525,7 +474,49 @@
 </section>
 
 <script>
-const UNLOCK_NAME = 'sam'; // expected input, lowercase
+const UNLOCK_NAME = 'Andres';
+
+// --- Código binario animado verde ---
+function createBinaryBackground() {
+  const bg = document.getElementById('binary-bg');
+  const binaryChars = ['0', '1'];
+  
+  // Crear múltiples caracteres binarios cayendo
+  for (let i = 0; i < 25; i++) {
+    const char = document.createElement('div');
+    char.className = 'binary-char';
+    char.textContent = binaryChars[Math.floor(Math.random() * 2)];
+    
+    const randomLeft = Math.random() * 100;
+    const randomDuration = 8 + Math.random() * 6;
+    const randomDelay = Math.random() * 5;
+    
+    char.style.left = randomLeft + '%';
+    char.style.animationDuration = randomDuration + 's';
+    char.style.animationDelay = -randomDelay + 's';
+    
+    bg.appendChild(char);
+  }
+}
+
+// --- Partículas de corazones que flotan ---
+function createHeartParticle(x, y) {
+  const particle = document.createElement('div');
+  particle.className = 'heart-particle';
+  particle.textContent = '❤';
+  particle.style.left = x + 'px';
+  particle.style.top = y + 'px';
+  
+  const tx = (Math.random() - 0.5) * 80;
+  const duration = 1.5 + Math.random() * 0.5;
+  
+  particle.style.setProperty('--tx', tx + 'px');
+  particle.style.animation = `float-up ${duration}s ease-out forwards`;
+  
+  document.body.appendChild(particle);
+  
+  setTimeout(() => particle.remove(), duration * 1000);
+}
 
 // --- Matrix rain background ---
 (function () {
@@ -564,21 +555,29 @@ function goTo(id) {
   const target = document.getElementById(id);
   target.classList.add('active');
   target.style.animation = 'none';
-  void target.offsetWidth; // force reflow to restart animation
+  void target.offsetWidth;
   target.style.animation = 'fadeUp 0.5s ease forwards';
   window.scrollTo(0, 0);
 }
 
 // --- Name gate ---
 function tryEnter() {
-  const val = document.getElementById('name-input').value.trim().toLowerCase();
+  const val = document.getElementById('name-input').value.trim();
   const errEl = document.getElementById('error-msg');
   const card = document.querySelector('#page-lock .card');
 
   if (val === UNLOCK_NAME) {
     errEl.classList.remove('show');
-    goTo('page-roulette');
-    buildRoulette();
+    // Crear partículas de corazones
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => {
+        createHeartParticle(
+          Math.random() * window.innerWidth,
+          window.innerHeight * 0.5
+        );
+      }, i * 100);
+    }
+    setTimeout(() => goTo('page-invitation'), 600);
   } else {
     errEl.classList.add('show');
     card.classList.remove('shake');
@@ -587,135 +586,33 @@ function tryEnter() {
   }
 }
 
-// --- Roulette ---
-const OPTIONS = ['🎬  cine', '🏓  pickleball', '🍽  cena', '⛳  minigolf', '🏎  go karts', '🎨  pintura', '🏐  volleyball'];
-
-let rouletteResult = null;
-let spinning = false;
-let currentIndex = 0;
-
-const ITEM_H = 64;
-const WIN_H = 192;  // visible height = 3 items
-const REPEATS = 8;  // pool size to allow long spins without running out
-
-function buildRoulette() {
-  const track = document.getElementById('roulette-track');
-  track.innerHTML = '';
-  track.style.transition = 'none';
-
-  const pool = [];
-  for (let r = 0; r < REPEATS; r++) OPTIONS.forEach(o => pool.push(o));
-  pool.forEach(o => {
-    const div = document.createElement('div');
-    div.className = 'roulette-item';
-    div.textContent = o;
-    track.appendChild(div);
-  });
-
-  currentIndex = OPTIONS.length * 2;
-  applyPos(false);
+// --- Invitation handlers ---
+function confirmYes() {
+  // Crear explosión de corazones
+  for (let i = 0; i < 15; i++) {
+    setTimeout(() => {
+      createHeartParticle(
+        Math.random() * window.innerWidth,
+        window.innerHeight * 0.5
+      );
+    }, i * 50);
+  }
+  setTimeout(() => { goTo('page-final'); }, 900);
 }
 
-function applyPos(animated, duration) {
-  const track = document.getElementById('roulette-track');
-  const offset = currentIndex * ITEM_H - (WIN_H / 2 - ITEM_H / 2);
-  track.style.transition = animated
-    ? `transform ${duration || 0.12}s cubic-bezier(0.25,0.46,0.45,0.94)`
-    : 'none';
-  track.style.transform = `translateY(-${offset}px)`;
-  updateClasses();
+function confirmNo() {
+  const card = document.querySelector('#page-invitation .card');
+  card.classList.remove('shake');
+  void card.offsetWidth;
+  card.classList.add('shake');
+  
+  setTimeout(() => {
+    card.classList.remove('shake');
+  }, 400);
 }
 
-function updateClasses() {
-  document.querySelectorAll('.roulette-item').forEach((el, i) => {
-    el.classList.remove('selected', 'near');
-    if (i === currentIndex) el.classList.add('selected');
-    else if (Math.abs(i - currentIndex) === 1) el.classList.add('near');
-  });
-}
-
-function spinRoulette() {
-  if (spinning) return;
-  spinning = true;
-
-  document.getElementById('spin-btn').disabled = true;
-  document.getElementById('confirm-roulette-btn').style.display = 'none';
-  document.getElementById('roulette-result').style.display = 'none';
-
-  buildRoulette();
-
-  const loops = 4 + Math.floor(Math.random() * 2);
-  const extra = Math.floor(Math.random() * OPTIONS.length);
-  const totalItems = OPTIONS.length * loops + extra;
-  const targetIndex = currentIndex + totalItems;
-  const spinDuration = 3.0 + Math.random() * 0.8;
-
-  // Two rAF calls ensure transition is applied after the DOM settles
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      currentIndex = targetIndex;
-      const offset = currentIndex * ITEM_H - (WIN_H / 2 - ITEM_H / 2);
-      const track = document.getElementById('roulette-track');
-      track.style.transition = `transform ${spinDuration}s cubic-bezier(0.12, 0.8, 0.3, 1.0)`;
-      track.style.transform = `translateY(-${offset}px)`;
-
-      const interval = setInterval(updateClasses, 60);
-      setTimeout(() => {
-        clearInterval(interval);
-        updateClasses();
-        endSpin();
-      }, spinDuration * 1000 + 50);
-    });
-  });
-}
-
-function endSpin() {
-  spinning = false;
-  rouletteResult = OPTIONS[currentIndex % OPTIONS.length];
-  document.getElementById('spin-btn').disabled = false;
-  document.getElementById('confirm-roulette-btn').style.display = 'inline-flex';
-}
-
-function confirmRoulette() {
-  if (!rouletteResult) return;
-  const badge = document.getElementById('result-badge');
-  badge.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ${rouletteResult}`;
-  document.getElementById('roulette-result').style.display = 'block';
-  document.getElementById('confirm-roulette-btn').style.display = 'none';
-  setTimeout(() => { buildTimePicker(); goTo('page-time'); }, 900);
-}
-
-// --- Time picker ---
-const TIMES = ['5pm', '6pm', '7pm', '8pm', '9pm'];
-let selectedTime = null;
-
-function buildTimePicker() {
-  const container = document.getElementById('time-options');
-  container.innerHTML = '';
-  selectedTime = null;
-  document.getElementById('confirm-time-btn').disabled = true;
-
-  TIMES.forEach(t => {
-    const div = document.createElement('div');
-    div.className = 'time-option';
-    div.innerHTML = `<div class="radio-dot"></div><span class="time-label">${t}</span>`;
-    div.onclick = () => {
-      document.querySelectorAll('.time-option').forEach(o => o.classList.remove('selected'));
-      div.classList.add('selected');
-      selectedTime = t;
-      document.getElementById('confirm-time-btn').disabled = false;
-    };
-    container.appendChild(div);
-  });
-}
-
-function confirmTime() {
-  if (!selectedTime) return;
-  document.getElementById('final-time-text').textContent = `${selectedTime}!`;
-  goTo('page-final');
-}
-
-buildRoulette();
+// Inicializar
+createBinaryBackground();
 </script>
 </body>
 </html>
